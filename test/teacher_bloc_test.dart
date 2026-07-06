@@ -5,6 +5,7 @@ import 'package:tutorial_management/bloc/teacher/teacher_state.dart';
 import 'package:tutorial_management/domain/repositories/teacher_repository.dart';
 import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
 import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
+import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.dart';
 import 'package:tutorial_management/models/teacher.dart';
 
 class FakeTeacherRepository implements TeacherRepository {
@@ -12,6 +13,11 @@ class FakeTeacherRepository implements TeacherRepository {
 
   @override
   Future<List<Teacher>> getTeachers() async {
+    return List.from(teachers);
+  }
+
+  @override
+  Future<List<Teacher>> getCachedTeachers() async {
     return List.from(teachers);
   }
 
@@ -30,6 +36,7 @@ void main() {
       fakeRepository = FakeTeacherRepository();
       teacherBloc = TeacherBloc(
         getTeachersUseCase: GetTeachersUseCase(fakeRepository),
+        getCachedTeachersUseCase: GetCachedTeachersUseCase(fakeRepository),
         addTeacherUseCase: AddTeacherUseCase(fakeRepository),
       );
     });
