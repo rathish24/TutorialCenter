@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tutorial_management/ui/widgets/teacher_card.dart';
+import 'package:tutorial_management/ui/widgets/grid_item_card.dart';
 
 void main() {
   setUpAll(() {

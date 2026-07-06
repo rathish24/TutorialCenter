@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tutorial_management/ui/widgets/teacher_card.dart'; // contains GridItemCard
+import 'package:tutorial_management/ui/widgets/grid_item_card.dart'; // contains GridItemCard
 
 class GenericHomeGrid<T> extends StatelessWidget {
   final List<T> items;
@@ -27,10 +27,7 @@ class GenericHomeGrid<T> extends StatelessWidget {
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
-        return GridItemCard(
-          name: getName(item),
-          imageUrl: getImageUrl(item),
-        );
+        return GridItemCard(name: getName(item), imageUrl: getImageUrl(item));
       },
     );
   }
