@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_management/theme/design_tokens.dart';
 
-class TeacherCard extends StatelessWidget {
+class GridItemCard extends StatelessWidget {
   final String name;
   final String imageUrl;
 
-  const TeacherCard({super.key, required this.name, required this.imageUrl});
+  const GridItemCard({super.key, required this.name, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {

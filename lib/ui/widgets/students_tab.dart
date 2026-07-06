@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_state.dart';
+import 'package:tutorial_management/bloc/student/student_bloc.dart';
+import 'package:tutorial_management/bloc/student/student_state.dart';
 import 'package:tutorial_management/theme/design_tokens.dart';
 
-class TeachersTab extends StatelessWidget {
-  const TeachersTab({super.key});
+class StudentsTab extends StatelessWidget {
+  const StudentsTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TeacherBloc, TeacherState>(
+    return BlocBuilder<StudentBloc, StudentState>(
       builder: (context, state) {
-        if (state is TeacherLoadingState || state is TeacherInitialState) {
+        if (state is StudentLoadingState || state is StudentInitialState) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.primary),
           );
-        } else if (state is TeacherErrorState) {
+        } else if (state is StudentErrorState) {
           return Center(
             child: Text(
               state.message,
               style: const TextStyle(color: Colors.red),
             ),
           );
-        } else if (state is TeacherLoadedState) {
-          final teachers = state.teachers;
+        } else if (state is StudentLoadedState) {
+          final students = state.students;
           return Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  "All Teachers",
+                  "All Students",
                   style: TextStyle(
                     color: AppColors.primaryText,
                     fontSize: 24,
@@ -40,9 +40,9 @@ class TeachersTab extends StatelessWidget {
                 const SizedBox(height: 16),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: teachers.length,
+                    itemCount: students.length,
                     itemBuilder: (context, index) {
-                      final teacher = teachers[index];
+                      final student = students[index];
                       return Container(
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(12),
@@ -57,7 +57,7 @@ class TeachersTab extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 30,
-                              backgroundImage: NetworkImage(teacher.profileURL),
+                              backgroundImage: NetworkImage(student.profileURL),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
@@ -65,7 +65,7 @@ class TeachersTab extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    teacher.name,
+                                    student.name,
                                     style: const TextStyle(
                                       color: AppColors.primaryText,
                                       fontSize: 16,
@@ -74,7 +74,7 @@ class TeachersTab extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "${teacher.gender}, ${teacher.age} years old",
+                                    "${student.gender}, ${student.age} years old",
                                     style: const TextStyle(
                                       color: AppColors.secondaryText,
                                       fontSize: 13,
@@ -90,7 +90,7 @@ class TeachersTab extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        teacher.contactNumber,
+                                        student.contactNumber,
                                         style: const TextStyle(
                                           color: AppColors.secondaryText,
                                           fontSize: 13,

@@ -4,6 +4,8 @@ import 'package:flutter/widget_previews.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
+import 'package:tutorial_management/bloc/student/student_bloc.dart';
+import 'package:tutorial_management/bloc/student/student_event.dart';
 import 'package:tutorial_management/ui/home_screen.dart';
 
 Future<void> main() async {
@@ -17,8 +19,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TeacherBloc()..add(const LoadTeachersEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TeacherBloc>(
+          create: (context) => TeacherBloc()..add(const LoadTeachersEvent()),
+        ),
+        BlocProvider<StudentBloc>(
+          create: (context) => StudentBloc()..add(LoadStudentsEvent()),
+        ),
+      ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: HomeScreen(),
