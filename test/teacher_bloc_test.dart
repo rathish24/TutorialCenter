@@ -2,14 +2,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_state.dart';
+import 'package:tutorial_management/domain/repositories/teacher_repository.dart';
+import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
+import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
 import 'package:tutorial_management/models/teacher.dart';
+
+class FakeTeacherRepository implements TeacherRepository {
+  final List<Teacher> teachers = [];
+
+  @override
+  Future<List<Teacher>> getTeachers() async {
+    return List.from(teachers);
+  }
+
+  @override
+  Future<void> addTeacher(Teacher teacher) async {
+    teachers.add(teacher);
+  }
+}
 
 void main() {
   group('TeacherBloc Tests', () {
     late TeacherBloc teacherBloc;
+    late FakeTeacherRepository fakeRepository;
 
     setUp(() {
-      teacherBloc = TeacherBloc();
+      fakeRepository = FakeTeacherRepository();
+      teacherBloc = TeacherBloc(
+        getTeachersUseCase: GetTeachersUseCase(fakeRepository),
+        addTeacherUseCase: AddTeacherUseCase(fakeRepository),
+      );
     });
 
     tearDown(() {
@@ -55,7 +77,7 @@ void main() {
 
       await expectLater(
         teacherBloc.stream,
-        emits(
+        emitsThrough(
           predicate<TeacherState>((state) {
             if (state is TeacherLoadedState) {
               return state.teachers.length == initialCount + 1 &&

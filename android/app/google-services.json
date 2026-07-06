@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941216169093",
+    "project_id": "tutorialmanagement-2e24d",
+    "storage_bucket": "tutorialmanagement-2e24d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941216169093:android:3b46e35819f775c0c2bdec",
+        "android_client_info": {
+          "package_name": "com.example.tutorial_management"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_MkBTn1rdkfhiq9YjvoCDCksw-4vI37Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

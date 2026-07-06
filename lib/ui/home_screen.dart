@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
 import 'package:tutorial_management/ui/widgets/teachers_tab.dart';
 import 'package:tutorial_management/ui/widgets/students_tab.dart';
 import 'package:tutorial_management/ui/widgets/home_tab.dart';
@@ -59,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: _selectedIndex == 0
                     ? AppColors.textIcons
                     : AppColors.textIcons.withValues(alpha: 0.5),
-                onPressed: () => setState(() => _selectedIndex = 0),
+                onPressed: () {
+                  setState(() => _selectedIndex = 0);
+                  context.read<TeacherBloc>().add(const LoadTeachersEvent());
+                },
               ),
               IconButton(
                 icon: const Icon(Icons.school),
