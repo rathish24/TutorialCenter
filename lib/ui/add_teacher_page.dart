@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
 import 'package:tutorial_management/helper/IconTextField.dart';
 import 'package:tutorial_management/models/teacher.dart';
 import 'package:tutorial_management/theme/design_tokens.dart';
@@ -53,7 +56,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
       contactNumber: contact,
     );
 
-    Navigator.pop(context, newTeacher);
+    context.read<TeacherBloc>().add(AddTeacherEvent(newTeacher));
+    Navigator.pop(context);
   }
 
   @override

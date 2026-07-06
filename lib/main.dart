@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
+import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
 import 'package:tutorial_management/ui/home_screen.dart';
 
 Future<void> main() async {
@@ -14,9 +17,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+    return BlocProvider(
+      create: (context) => TeacherBloc()..add(const LoadTeachersEvent()),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomeScreen(),
+      ),
     );
   }
 }
