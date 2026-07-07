@@ -1,3 +1,5 @@
+import 'package:tutorial_management/core/errors/failures.dart';
+import 'package:tutorial_management/core/errors/result.dart';
 import 'package:tutorial_management/features/teacher/data/datasources/teacher_remote_datasource.dart';
 import 'package:tutorial_management/features/teacher/data/datasources/teacher_local_datasource.dart';
 import 'package:tutorial_management/features/teacher/domain/repositories/teacher_repository.dart';
@@ -14,22 +16,37 @@ class TeacherRepositoryImpl implements TeacherRepository {
   });
 
   @override
-  Future<List<Teacher>> getCachedTeachers() async {
-    final models = await localDatasource.getCachedTeachers();
-    return models.map((model) => model as Teacher).toList();
+  Future<Result<List<Teacher>, Failure>> getCachedTeachers() async {
+    try {
+      final models = await localDatasource.getCachedTeachers();
+      final teachers = models.map((model) => model as Teacher).toList();
+      return Success(teachers);
+    } catch (e) {
+      return ErrorResult(UnknownFailure(e.toString()));
+    }
   }
 
   @override
-  Future<List<Teacher>> getTeachers() async {
-    final models = await remoteDatasource.getTeachers();
-    await localDatasource.cacheTeachers(models);
-    return models.map((model) => model as Teacher).toList();
+  Future<Result<List<Teacher>, Failure>> getTeachers() async {
+    try {
+      final models = await remoteDatasource.getTeachers();
+      await localDatasource.cacheTeachers(models);
+      final teachers = models.map((model) => model as Teacher).toList();
+      return Success(teachers);
+    } catch (e) {
+      return ErrorResult(ExceptionMapper.mapToFailure(e));
+    }
   }
 
   @override
-  Future<void> addTeacher(Teacher teacher) async {
-    final model = TeacherModel.fromEntity(teacher);
-    await remoteDatasource.addTeacher(model);
-    await localDatasource.cacheSingleTeacher(model);
+  Future<Result<void, Failure>> addTeacher(Teacher teacher) async {
+    try {
+      final model = TeacherModel.fromEntity(teacher);
+      await remoteDatasource.addTeacher(model);
+      await localDatasource.cacheSingleTeacher(model);
+      return const Success(null);
+    } catch (e) {
+      return ErrorResult(ExceptionMapper.mapToFailure(e));
+    }
   }
 }

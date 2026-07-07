@@ -14,6 +14,8 @@ import 'package:tutorial_management/features/teacher/domain/entities/teacher.dar
 import 'package:tutorial_management/core/navigation/app_navigator.dart';
 import 'package:tutorial_management/core/navigation/app_router.dart';
 import 'package:tutorial_management/core/theme/app_theme.dart';
+import 'package:tutorial_management/core/errors/failures.dart';
+import 'package:tutorial_management/core/errors/result.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,11 +58,11 @@ class MyApp extends StatelessWidget {
 // Fake repository and use cases for Widget Preview compatibility
 class _FakeTeacherRepository implements TeacherRepository {
   @override
-  Future<List<Teacher>> getTeachers() async => [];
+  Future<Result<List<Teacher>, Failure>> getTeachers() async => const Success([]);
   @override
-  Future<List<Teacher>> getCachedTeachers() async => [];
+  Future<Result<List<Teacher>, Failure>> getCachedTeachers() async => const Success([]);
   @override
-  Future<void> addTeacher(Teacher teacher) async {}
+  Future<Result<void, Failure>> addTeacher(Teacher teacher) async => const Success(null);
 }
 
 @Preview(name: 'Home')

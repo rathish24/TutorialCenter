@@ -2,7 +2,7 @@ import 'dart:developer' as developer;
 import 'package:equatable/equatable.dart';
 import 'package:tutorial_management/features/student/domain/entities/student.dart';
 
-abstract class StudentEvent extends Equatable {
+sealed class StudentEvent extends Equatable {
   const StudentEvent();
 
   @override

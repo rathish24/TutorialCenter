@@ -7,6 +7,8 @@ import 'package:tutorial_management/features/teacher/domain/usecases/add_teacher
 import 'package:tutorial_management/features/teacher/domain/usecases/get_teachers_usecase.dart';
 import 'package:tutorial_management/features/teacher/domain/usecases/get_cached_teachers_usecase.dart';
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
+import 'package:tutorial_management/core/errors/failures.dart';
+import 'package:tutorial_management/core/errors/result.dart';
 
 class FakeTeacherRepository implements TeacherRepository {
   final List<Teacher> cachedTeachers = [];
@@ -14,22 +16,23 @@ class FakeTeacherRepository implements TeacherRepository {
   bool throwRemoteError = false;
 
   @override
-  Future<List<Teacher>> getTeachers() async {
+  Future<Result<List<Teacher>, Failure>> getTeachers() async {
     if (throwRemoteError) {
-      throw Exception("Remote fetch failed");
+      return const ErrorResult(UnknownFailure("Remote fetch failed"));
     }
-    return List.from(remoteTeachers);
+    return Success(List.from(remoteTeachers));
   }
 
   @override
-  Future<List<Teacher>> getCachedTeachers() async {
-    return List.from(cachedTeachers);
+  Future<Result<List<Teacher>, Failure>> getCachedTeachers() async {
+    return Success(List.from(cachedTeachers));
   }
 
   @override
-  Future<void> addTeacher(Teacher teacher) async {
+  Future<Result<void, Failure>> addTeacher(Teacher teacher) async {
     remoteTeachers.add(teacher);
     cachedTeachers.add(teacher);
+    return const Success(null);
   }
 }
 

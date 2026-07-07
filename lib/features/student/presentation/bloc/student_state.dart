@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:tutorial_management/features/student/domain/entities/student.dart';
 
-abstract class StudentState extends Equatable {
+sealed class StudentState extends Equatable {
   const StudentState();
   @override
   List<Object> get props => [];

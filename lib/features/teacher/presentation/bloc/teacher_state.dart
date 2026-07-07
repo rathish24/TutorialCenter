@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
 
-abstract class TeacherState extends Equatable {
+sealed class TeacherState extends Equatable {
   const TeacherState();
 
   @override

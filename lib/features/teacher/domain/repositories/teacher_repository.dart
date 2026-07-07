@@ -1,7 +1,9 @@
+import 'package:tutorial_management/core/errors/failures.dart';
+import 'package:tutorial_management/core/errors/result.dart';
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
 
 abstract class TeacherRepository {
-  Future<List<Teacher>> getTeachers();
-  Future<List<Teacher>> getCachedTeachers();
-  Future<void> addTeacher(Teacher teacher);
+  Future<Result<List<Teacher>, Failure>> getTeachers();
+  Future<Result<List<Teacher>, Failure>> getCachedTeachers();
+  Future<Result<void, Failure>> addTeacher(Teacher teacher);
 }
