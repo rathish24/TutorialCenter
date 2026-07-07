@@ -13,28 +13,25 @@ class TeachersHomeList extends StatelessWidget {
 
     return BlocBuilder<TeacherBloc, TeacherState>(
       builder: (context, state) {
-        if (state is TeacherLoadingState || state is TeacherInitialState) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: CircularProgressIndicator(),
+        return switch (state) {
+          TeacherInitialState() || TeacherLoadingState() => const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: CircularProgressIndicator(),
+              ),
             ),
-          );
-        } else if (state is TeacherErrorState) {
-          return Center(
-            child: Text(
-              state.message,
-              style: TextStyle(color: colorScheme.error),
+          TeacherErrorState(message: final message) => Center(
+              child: Text(
+                message,
+                style: TextStyle(color: colorScheme.error),
+              ),
             ),
-          );
-        } else if (state is TeacherLoadedState) {
-          return GenericHomeGrid(
-            items: state.teachers,
-            getName: (teacher) => teacher.name,
-            getImageUrl: (teacher) => teacher.profileURL,
-          );
-        }
-        return const SizedBox.shrink();
+          TeacherLoadedState(teachers: final teachers) => GenericHomeGrid(
+              items: teachers,
+              getName: (teacher) => teacher.name,
+              getImageUrl: (teacher) => teacher.profileURL,
+            ),
+        };
       },
     );
   }

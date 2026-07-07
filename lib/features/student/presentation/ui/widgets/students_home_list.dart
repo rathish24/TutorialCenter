@@ -13,28 +13,26 @@ class StudentsHomeList extends StatelessWidget {
 
     return BlocBuilder<StudentBloc, StudentState>(
       builder: (context, state) {
-        if (state is StudentLoadingState || state is StudentInitialState) {
-          return const Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: CircularProgressIndicator(),
+        return switch (state) {
+          StudentInitialState() || StudentLoadingState() => const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: CircularProgressIndicator(),
+              ),
             ),
-          );
-        } else if (state is StudentErrorState) {
-          return Center(
-            child: Text(
-              state.message,
-              style: TextStyle(color: colorScheme.error),
+          StudentErrorState(message: final message) => Center(
+              child: Text(
+                message,
+                style: TextStyle(color: colorScheme.error),
+              ),
             ),
-          );
-        } else if (state is StudentLoadedState) {
-          return GenericHomeGrid(
-            items: state.students,
-            getName: (student) => student.name,
-            getImageUrl: (student) => student.profileURL,
-          );
-        }
-        return const SizedBox.shrink();
+          StudentAddedState() => const SizedBox.shrink(),
+          StudentLoadedState(students: final students) => GenericHomeGrid(
+              items: students,
+              getName: (student) => student.name,
+              getImageUrl: (student) => student.profileURL,
+            ),
+        };
       },
     );
   }
