@@ -1,27 +1,28 @@
 import 'package:hive/hive.dart';
+import 'package:tutorial_management/core/cache/local_database_client.dart';
 
 /// Decoupled wrapper client for performing Hive local database operations.
-class HiveClient {
+class HiveClient implements LocalDatabaseClient {
   final Box _box;
 
   HiveClient(this._box);
 
-  /// Retrieves data from local storage, returning defaultValue if key does not exist.
+  @override
   dynamic get(String key, {dynamic defaultValue}) {
     return _box.get(key, defaultValue: defaultValue);
   }
 
-  /// Inserts or updates data in local storage.
+  @override
   Future<void> put(String key, dynamic value) async {
     await _box.put(key, value);
   }
 
-  /// Deletes a key-value record from local storage.
+  @override
   Future<void> delete(String key) async {
     await _box.delete(key);
   }
 
-  /// Clears all database records from the box.
+  @override
   Future<void> clear() async {
     await _box.clear();
   }

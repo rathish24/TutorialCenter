@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tutorial_management/core/cache/hive_client.dart';
+import 'package:tutorial_management/core/cache/local_database_client.dart';
 import 'package:tutorial_management/core/network/api_client.dart';
 import 'package:tutorial_management/core/network/connectivity_service.dart';
 import 'package:tutorial_management/core/network/interceptors/auth_interceptor.dart';
@@ -87,14 +88,14 @@ Future<void> setupLocator() async {
   // Register Firebase Wrappers
   sl.registerLazySingleton<FirebaseLogger>(() => FirebaseLogger(isDebug: kDebugMode));
   sl.registerLazySingleton<FirestoreClient>(() => FirestoreClient(sl(), sl()));
-  sl.registerLazySingleton<HiveClient>(() => HiveClient(sl<Box>()));
+  sl.registerLazySingleton<LocalDatabaseClient>(() => HiveClient(sl<Box>()));
 
   // Register datasources
   sl.registerLazySingleton<TeacherRemoteDatasource>(
     () => TeacherFirebaseDatasource(firestoreClient: sl()),
   );
   sl.registerLazySingleton<TeacherLocalDatasource>(
-    () => HiveTeacherDatasource(hiveClient: sl()),
+    () => HiveTeacherDatasource(localDatabaseClient: sl()),
   );
 
   // Register repositories
