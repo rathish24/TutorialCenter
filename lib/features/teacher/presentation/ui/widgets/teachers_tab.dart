@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_bloc.dart';
 import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_state.dart';
-import 'package:tutorial_management/core/theme/design_tokens.dart';
 
 class TeachersTab extends StatelessWidget {
   const TeachersTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return BlocBuilder<TeacherBloc, TeacherState>(
       builder: (context, state) {
         if (state is TeacherLoadingState || state is TeacherInitialState) {
           return const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
+            child: CircularProgressIndicator(),
           );
         } else if (state is TeacherErrorState) {
           return Center(
             child: Text(
               state.message,
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: colorScheme.error),
             ),
           );
         } else if (state is TeacherLoadedState) {
@@ -29,10 +30,10 @@ class TeachersTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "All Teachers",
                   style: TextStyle(
-                    color: AppColors.primaryText,
+                    color: colorScheme.onSurface,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -47,10 +48,10 @@ class TeachersTab extends StatelessWidget {
                         margin: const EdgeInsets.only(bottom: 12),
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.lightPrimary.withValues(alpha: 0.3),
+                          color: colorScheme.primaryContainer.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: AppColors.primary.withValues(alpha: 0.15),
+                            color: colorScheme.primary.withValues(alpha: 0.15),
                           ),
                         ),
                         child: Row(
@@ -66,8 +67,8 @@ class TeachersTab extends StatelessWidget {
                                 children: [
                                   Text(
                                     teacher.name,
-                                    style: const TextStyle(
-                                      color: AppColors.primaryText,
+                                    style: TextStyle(
+                                      color: colorScheme.onSurface,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -75,24 +76,24 @@ class TeachersTab extends StatelessWidget {
                                   const SizedBox(height: 4),
                                   Text(
                                     "${teacher.gender}, ${teacher.age} years old",
-                                    style: const TextStyle(
-                                      color: AppColors.secondaryText,
+                                    style: TextStyle(
+                                      color: colorScheme.onSurfaceVariant,
                                       fontSize: 13,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      const Icon(
+                                      Icon(
                                         Icons.phone,
                                         size: 14,
-                                        color: AppColors.primary,
+                                        color: colorScheme.primary,
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
                                         teacher.contactNumber,
-                                        style: const TextStyle(
-                                          color: AppColors.secondaryText,
+                                        style: TextStyle(
+                                          color: colorScheme.onSurfaceVariant,
                                           fontSize: 13,
                                         ),
                                       ),

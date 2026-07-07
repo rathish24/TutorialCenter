@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
-import 'package:tutorial_management/core/theme/design_tokens.dart';
 
 class TeacherListPage extends StatelessWidget {
   final List<Teacher> teachers;
@@ -9,16 +8,18 @@ class TeacherListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.darkPrimary,
+      backgroundColor: colorScheme.primary,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "All Teachers",
-          style: TextStyle(color: AppColors.textIcons, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colorScheme.onPrimary, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textIcons),
+        iconTheme: IconThemeData(color: colorScheme.onPrimary),
       ),
       body: SafeArea(
         child: Padding(
@@ -31,9 +32,9 @@ class TeacherListPage extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.textIcons.withValues(alpha: 0.1),
+                  color: colorScheme.onPrimary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.textIcons.withValues(alpha: 0.15)),
+                  border: Border.all(color: colorScheme.onPrimary.withValues(alpha: 0.15)),
                 ),
                 child: Row(
                   children: [
@@ -48,8 +49,8 @@ class TeacherListPage extends StatelessWidget {
                         children: [
                           Text(
                             teacher.name,
-                            style: const TextStyle(
-                              color: AppColors.textIcons,
+                            style: TextStyle(
+                              color: colorScheme.onPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -58,7 +59,7 @@ class TeacherListPage extends StatelessWidget {
                           Text(
                             "${teacher.gender}, ${teacher.age} years old",
                             style: TextStyle(
-                              color: AppColors.textIcons.withValues(alpha: 0.7),
+                              color: colorScheme.onPrimary.withValues(alpha: 0.7),
                               fontSize: 13,
                             ),
                           ),
@@ -68,13 +69,13 @@ class TeacherListPage extends StatelessWidget {
                               Icon(
                                 Icons.phone,
                                 size: 14,
-                                color: AppColors.textIcons.withValues(alpha: 0.7),
+                                color: colorScheme.onPrimary.withValues(alpha: 0.7),
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 teacher.contactNumber,
                                 style: TextStyle(
-                                  color: AppColors.textIcons.withValues(alpha: 0.7),
+                                  color: colorScheme.onPrimary.withValues(alpha: 0.7),
                                   fontSize: 13,
                                 ),
                               ),

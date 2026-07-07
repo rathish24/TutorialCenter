@@ -4,7 +4,6 @@ import 'package:tutorial_management/features/home/presentation/ui/home_screen.da
 import 'package:tutorial_management/features/home/presentation/ui/widgets/home_tab.dart';
 import 'package:tutorial_management/features/teacher/presentation/ui/widgets/teachers_tab.dart';
 import 'package:tutorial_management/features/student/presentation/ui/widgets/students_tab.dart';
-import 'package:tutorial_management/core/theme/design_tokens.dart';
 import 'package:tutorial_management/features/teacher/presentation/ui/add_teacher_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tutorial_management/core/navigation/app_navigator.dart';
@@ -58,10 +57,10 @@ class AppRouter {
             routes: [
               GoRoute(
                 path: profile,
-                builder: (context, state) => const Center(
+                builder: (context, state) => Center(
                   child: Text(
                     "Profile Tab",
-                    style: TextStyle(color: AppColors.primaryText, fontSize: 18),
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18),
                   ),
                 ),
               ),

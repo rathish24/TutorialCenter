@@ -5,7 +5,6 @@ import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_b
 import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_event.dart';
 import 'package:tutorial_management/core/helper/icontextfield.dart';
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
-import 'package:tutorial_management/core/theme/design_tokens.dart';
 
 class AddTeacherPage extends StatefulWidget {
   const AddTeacherPage({super.key});
@@ -30,23 +29,21 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
   }
 
   void _submit() {
-    final name = _nameController.text.trim();
-    final ageStr = _ageController.text.trim();
-    final gender = _genderController.text.trim();
-    final contact = _contactController.text.trim();
+    final name = _nameController.text;
+    final age = int.tryParse(_ageController.text) ?? 0;
+    final gender = _genderController.text;
+    final contact = _contactController.text;
+    final id = DateTime.now().millisecondsSinceEpoch;
 
-    if (name.isEmpty || ageStr.isEmpty || gender.isEmpty || contact.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Please fill all fields")));
+    // Use a placeholder image URL for testing
+    const profileURL = 'https://picsum.photos/200';
+
+    if (name.isEmpty || age == 0 || gender.isEmpty || contact.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
       return;
     }
-
-    final age = int.tryParse(ageStr) ?? 0;
-
-    // Generate a unique ID and a random profile avatar image URL
-    final id = DateTime.now().millisecondsSinceEpoch;
-    final profileURL = "https://i.pravatar.cc/150?img=${(id % 70) + 1}";
 
     final newTeacher = Teacher(
       name: name,
@@ -63,16 +60,18 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppColors.lightPrimary,
+      backgroundColor: colorScheme.primaryContainer,
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Add Teacher",
-          style: TextStyle(color: AppColors.primaryText),
+          style: TextStyle(color: colorScheme.onPrimaryContainer),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.primary),
+        iconTheme: IconThemeData(color: colorScheme.primary),
         leading: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: IconButton(
@@ -114,8 +113,8 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                 onPressed: _submit,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(50),
-                  backgroundColor: AppColors.textIcons,
-                  foregroundColor: AppColors.primary,
+                  backgroundColor: colorScheme.surface,
+                  foregroundColor: colorScheme.primary,
                 ),
                 child: const Text("Add Teacher"),
               ),

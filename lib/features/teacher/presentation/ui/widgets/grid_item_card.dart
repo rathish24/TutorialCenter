@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tutorial_management/core/theme/design_tokens.dart';
 
 class GridItemCard extends StatelessWidget {
   final String name;
@@ -9,20 +8,22 @@ class GridItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.lightPrimary.withValues(alpha: 0.3),
+        color: colorScheme.primaryContainer.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.15)),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.15)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             name,
-            style: const TextStyle(
-              color: AppColors.primaryText,
+            style: TextStyle(
+              color: colorScheme.onSurface,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
@@ -40,7 +41,7 @@ class GridItemCard extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primaryText.withValues(alpha: 0.15),
+                  color: colorScheme.onSurface.withValues(alpha: 0.15),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

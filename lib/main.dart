@@ -13,6 +13,7 @@ import 'package:tutorial_management/features/teacher/domain/usecases/get_cached_
 import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
 import 'package:tutorial_management/core/navigation/app_navigator.dart';
 import 'package:tutorial_management/core/navigation/app_router.dart';
+import 'package:tutorial_management/core/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.system,
           routerConfig: sl<AppRouter>().router,
         ),
       ),
