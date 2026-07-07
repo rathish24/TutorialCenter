@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tutorial_management/data/datasources/teacher_firebase_datasource.dart';
 import 'package:tutorial_management/data/datasources/teacher_local_datasource.dart';
@@ -12,63 +13,43 @@ import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.
 import 'package:tutorial_management/navigation/app_navigator.dart';
 import 'package:tutorial_management/navigation/app_router.dart';
 
-class AppContainer {
-  final Box? teachersBox;
-  final FirebaseFirestore? firestore;
-  final TeacherFirebaseDatasource? remoteDatasource;
-  final TeacherLocalDatasource? localDatasource;
-  final TeacherRepository? teacherRepository;
+final sl = GetIt.instance;
 
-  final GetTeachersUseCase getTeachersUseCase;
-  final GetCachedTeachersUseCase getCachedTeachersUseCase;
-  final AddTeacherUseCase addTeacherUseCase;
-  late final AppRouter appRouter;
-  late final AppNavigator appNavigator;
+Future<void> setupLocator() async {
+  // Initialize services
+  await Firebase.initializeApp();
+  await Hive.initFlutter();
 
-  AppContainer({
-    this.teachersBox,
-    this.firestore,
-    this.remoteDatasource,
-    this.localDatasource,
-    this.teacherRepository,
-    required this.getTeachersUseCase,
-    required this.getCachedTeachersUseCase,
-    required this.addTeacherUseCase,
-    required this.appRouter,
-    required this.appNavigator,
-  });
+  // Register external dependencies / drivers
+  final box = await Hive.openBox('teachers_box');
+  sl.registerSingleton<Box>(box);
 
-  static Future<AppContainer> initialize() async {
-    await Firebase.initializeApp();
-    await Hive.initFlutter();
+  final firestoreInstance = FirebaseFirestore.instance;
+  sl.registerSingleton<FirebaseFirestore>(firestoreInstance);
 
-    final box = await Hive.openBox('teachers_box');
-    final firestoreInstance = FirebaseFirestore.instance;
+  // Register datasources
+  sl.registerLazySingleton<TeacherFirebaseDatasource>(
+    () => TeacherFirebaseDatasource(firestore: sl()),
+  );
+  sl.registerLazySingleton<TeacherLocalDatasource>(
+    () => HiveTeacherDatasource(box: sl()),
+  );
 
-    final remote = TeacherFirebaseDatasource(firestore: firestoreInstance);
-    final local = HiveTeacherDatasource(box: box);
+  // Register repositories
+  sl.registerLazySingleton<TeacherRepository>(
+    () => TeacherRepositoryImpl(
+      remoteDatasource: sl<TeacherFirebaseDatasource>(),
+      localDatasource: sl<TeacherLocalDatasource>(),
+    ),
+  );
 
-    final repository = TeacherRepositoryImpl(
-      remoteDatasource: remote,
-      localDatasource: local,
-    );
+  // Register use cases
+  sl.registerLazySingleton(() => GetTeachersUseCase(sl()));
+  sl.registerLazySingleton(() => GetCachedTeachersUseCase(sl()));
+  sl.registerLazySingleton(() => AddTeacherUseCase(sl()));
 
-    final getTeachers = GetTeachersUseCase(repository);
-    final getCachedTeachers = GetCachedTeachersUseCase(repository);
-    final addTeacher = AddTeacherUseCase(repository);
-    final appRouter = AppRouter();
-    final appNavigator = AppNavigatorImpl(appRouter);
-    return AppContainer(
-      teachersBox: box,
-      firestore: firestoreInstance,
-      remoteDatasource: remote,
-      localDatasource: local,
-      teacherRepository: repository,
-      getTeachersUseCase: getTeachers,
-      getCachedTeachersUseCase: getCachedTeachers,
-      addTeacherUseCase: addTeacher,
-      appRouter: appRouter,
-      appNavigator: appNavigator,
-    );
-  }
+  // Register routing & navigation
+  final appRouter = AppRouter();
+  sl.registerSingleton<AppRouter>(appRouter);
+  sl.registerSingleton<AppNavigator>(AppNavigatorImpl(appRouter));
 }

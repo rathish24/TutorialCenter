@@ -16,28 +16,24 @@ import 'package:tutorial_management/navigation/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final container = await AppContainer.initialize();
-
-  runApp(MyApp(container: container));
+  await setupLocator();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AppContainer container;
-
-  const MyApp({super.key, required this.container});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider<AppNavigator>.value(
-      value: container.appNavigator,
+      value: sl<AppNavigator>(),
       child: MultiBlocProvider(
         providers: [
           BlocProvider<TeacherBloc>(
             create: (context) => TeacherBloc(
-              getTeachersUseCase: container.getTeachersUseCase,
-              getCachedTeachersUseCase: container.getCachedTeachersUseCase,
-              addTeacherUseCase: container.addTeacherUseCase,
+              getTeachersUseCase: sl<GetTeachersUseCase>(),
+              getCachedTeachersUseCase: sl<GetCachedTeachersUseCase>(),
+              addTeacherUseCase: sl<AddTeacherUseCase>(),
             )..add(const LoadTeachersEvent()),
           ),
           BlocProvider<StudentBloc>(
@@ -46,7 +42,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
-          routerConfig: container.appRouter.router,
+          routerConfig: sl<AppRouter>().router,
         ),
       ),
     );
@@ -68,12 +64,22 @@ Widget myAppPreview() {
   final fakeRepo = _FakeTeacherRepository();
   final fakeRouter = AppRouter();
   final fakeNavigator = AppNavigatorImpl(fakeRouter);
-  final fakeContainer = AppContainer(
-    getTeachersUseCase: GetTeachersUseCase(fakeRepo),
-    getCachedTeachersUseCase: GetCachedTeachersUseCase(fakeRepo),
-    addTeacherUseCase: AddTeacherUseCase(fakeRepo),
-    appRouter: fakeRouter,
-    appNavigator: fakeNavigator,
-  );
-  return MyApp(container: fakeContainer);
+
+  if (sl.isRegistered<AppNavigator>()) {
+    sl.pushNewScope(init: (sl) {
+      sl.registerSingleton<GetTeachersUseCase>(GetTeachersUseCase(fakeRepo));
+      sl.registerSingleton<GetCachedTeachersUseCase>(GetCachedTeachersUseCase(fakeRepo));
+      sl.registerSingleton<AddTeacherUseCase>(AddTeacherUseCase(fakeRepo));
+      sl.registerSingleton<AppRouter>(fakeRouter);
+      sl.registerSingleton<AppNavigator>(fakeNavigator);
+    });
+  } else {
+    sl.registerSingleton<GetTeachersUseCase>(GetTeachersUseCase(fakeRepo));
+    sl.registerSingleton<GetCachedTeachersUseCase>(GetCachedTeachersUseCase(fakeRepo));
+    sl.registerSingleton<AddTeacherUseCase>(AddTeacherUseCase(fakeRepo));
+    sl.registerSingleton<AppRouter>(fakeRouter);
+    sl.registerSingleton<AppNavigator>(fakeNavigator);
+  }
+
+  return const MyApp();
 }
