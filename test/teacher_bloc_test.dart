@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_state.dart';
-import 'package:tutorial_management/domain/repositories/teacher_repository.dart';
-import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
-import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
-import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.dart';
-import 'package:tutorial_management/models/teacher.dart';
+import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_bloc.dart';
+import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_event.dart';
+import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_state.dart';
+import 'package:tutorial_management/features/teacher/domain/repositories/teacher_repository.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/add_teacher_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/get_teachers_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/get_cached_teachers_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
 
 class FakeTeacherRepository implements TeacherRepository {
   final List<Teacher> cachedTeachers = [];

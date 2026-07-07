@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
-import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
-import 'package:tutorial_management/bloc/student/student_bloc.dart';
-import 'package:tutorial_management/bloc/student/student_event.dart';
-import 'package:tutorial_management/di/app_container.dart';
-import 'package:tutorial_management/domain/repositories/teacher_repository.dart';
-import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
-import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
-import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.dart';
-import 'package:tutorial_management/models/teacher.dart';
-import 'package:tutorial_management/navigation/app_navigator.dart';
-import 'package:tutorial_management/navigation/app_router.dart';
+import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_bloc.dart';
+import 'package:tutorial_management/features/teacher/presentation/bloc/teacher_event.dart';
+import 'package:tutorial_management/features/student/presentation/bloc/student_bloc.dart';
+import 'package:tutorial_management/features/student/presentation/bloc/student_event.dart';
+import 'package:tutorial_management/core/di/app_container.dart';
+import 'package:tutorial_management/features/teacher/domain/repositories/teacher_repository.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/add_teacher_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/get_teachers_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/usecases/get_cached_teachers_usecase.dart';
+import 'package:tutorial_management/features/teacher/domain/entities/teacher.dart';
+import 'package:tutorial_management/core/navigation/app_navigator.dart';
+import 'package:tutorial_management/core/navigation/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
