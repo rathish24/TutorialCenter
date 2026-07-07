@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:tutorial_management/core/config/app_config.dart';
 import 'package:tutorial_management/core/network/token_storage.dart';
 
 /// Abstract contract for standard GraphQL operations.
@@ -13,16 +14,17 @@ abstract class GraphQLClientWrapper {
 /// Concrete implementation of [GraphQLClientWrapper] utilizing [GraphQLClient].
 class GraphQLClientWrapperImpl implements GraphQLClientWrapper {
   final TokenStorage _tokenStorage;
+  final AppConfig _appConfig;
   late final GraphQLClient client;
 
-  GraphQLClientWrapperImpl(this._tokenStorage) {
+  GraphQLClientWrapperImpl(this._tokenStorage, this._appConfig) {
     _initClient();
   }
 
   void _initClient() {
     // 1. HTTP Endpoint Link
     final HttpLink httpLink = HttpLink(
-      'https://api.example.com/graphql', // Placeholder URL, to be configured
+      _appConfig.graphqlUrl,
     );
 
     // 2. Auth Link to dynamically fetch and inject access tokens

@@ -1,0 +1,6 @@
+{
+  "ENVIRONMENT": "preprod",
+  "API_URL": "https://preprod-api.tutorialmanagement.com/v1",
+  "GRAPHQL_URL": "https://preprod-api.tutorialmanagement.com/graphql",
+  "IS_DEBUG": false
+}

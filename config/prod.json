@@ -1,0 +1,6 @@
+{
+  "ENVIRONMENT": "prod",
+  "API_URL": "https://api.tutorialmanagement.com/v1",
+  "GRAPHQL_URL": "https://api.tutorialmanagement.com/graphql",
+  "IS_DEBUG": false
+}

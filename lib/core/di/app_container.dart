@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tutorial_management/core/config/app_config.dart';
 import 'package:tutorial_management/core/cache/hive_client.dart';
 import 'package:tutorial_management/core/cache/local_database_client.dart';
 import 'package:tutorial_management/core/network/api_client.dart';
@@ -44,9 +45,11 @@ Future<void> setupLocator() async {
   final firestoreInstance = FirebaseFirestore.instance;
   sl.registerSingleton<FirebaseFirestore>(firestoreInstance);
 
-  // Register Connectivity Service
-  sl.registerLazySingleton<Connectivity>(() => Connectivity());
-  sl.registerLazySingleton<ConnectivityService>(() => ConnectivityServiceImpl(sl()));
+  // Register Environment Configurations
+  sl.registerLazySingleton<AppConfig>(() => AppConfig.fromEnvironment());
+
+  // Register Connectivity checker
+  sl.registerLazySingleton<ConnectivityService>(() => ConnectivityServiceImpl(Connectivity()));
 
   // Register Token Management
   sl.registerLazySingleton<TokenStorage>(() => InMemoryTokenStorage());
@@ -56,6 +59,7 @@ Future<void> setupLocator() async {
   sl.registerLazySingleton<Dio>(() {
     final dio = Dio(
       BaseOptions(
+        baseUrl: sl<AppConfig>().apiUrl,
         connectTimeout: const Duration(seconds: 15),
         receiveTimeout: const Duration(seconds: 15),
         sendTimeout: const Duration(seconds: 15),
@@ -64,6 +68,7 @@ Future<void> setupLocator() async {
 
     final refreshDio = Dio(
       BaseOptions(
+        baseUrl: sl<AppConfig>().apiUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),
@@ -85,7 +90,7 @@ Future<void> setupLocator() async {
 
   // Register API Client
   sl.registerLazySingleton<ApiClient>(() => ApiClientImpl(sl()));
-  sl.registerLazySingleton<GraphQLClientWrapper>(() => GraphQLClientWrapperImpl(sl()));
+  sl.registerLazySingleton<GraphQLClientWrapper>(() => GraphQLClientWrapperImpl(sl(), sl()));
 
   // Register Firebase Wrappers
   sl.registerLazySingleton<FirebaseLogger>(() => FirebaseLogger(isDebug: kDebugMode));

@@ -1,0 +1,6 @@
+{
+  "ENVIRONMENT": "uat",
+  "API_URL": "https://uat-api.tutorialmanagement.com/v1",
+  "GRAPHQL_URL": "https://uat-api.tutorialmanagement.com/graphql",
+  "IS_DEBUG": true
+}
