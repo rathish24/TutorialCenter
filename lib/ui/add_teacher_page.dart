@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial_management/navigation/app_navigator.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
 import 'package:tutorial_management/helper/icontextfield.dart';
@@ -57,7 +58,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
     );
 
     context.read<TeacherBloc>().add(AddTeacherEvent(newTeacher));
-    Navigator.pop(context);
+    context.read<AppNavigator>().goBack();
   }
 
   @override
@@ -65,14 +66,17 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
     return Scaffold(
       backgroundColor: AppColors.lightPrimary,
       appBar: AppBar(
-        title: const Text("Add Teacher", style: TextStyle(color: AppColors.primaryText)),
+        title: const Text(
+          "Add Teacher",
+          style: TextStyle(color: AppColors.primaryText),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.primary),
         leading: Padding(
           padding: const EdgeInsets.only(left: 0),
           child: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.read<AppNavigator>().goBack(),
             icon: const Icon(Icons.arrow_back),
           ),
         ),

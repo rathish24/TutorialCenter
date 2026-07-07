@@ -11,44 +11,43 @@ import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
 import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
 import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.dart';
 import 'package:tutorial_management/models/teacher.dart';
-import 'package:tutorial_management/ui/home_screen.dart';
+import 'package:tutorial_management/navigation/app_navigator.dart';
+import 'package:tutorial_management/navigation/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   final container = await AppContainer.initialize();
 
-  runApp(
-    MyApp(container: container),
-  );
+  runApp(MyApp(container: container));
 }
 
 class MyApp extends StatelessWidget {
   final AppContainer container;
 
-  const MyApp({
-    super.key,
-    required this.container,
-  });
+  const MyApp({super.key, required this.container});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<TeacherBloc>(
-          create: (context) => TeacherBloc(
-            getTeachersUseCase: container.getTeachersUseCase,
-            getCachedTeachersUseCase: container.getCachedTeachersUseCase,
-            addTeacherUseCase: container.addTeacherUseCase,
-          )..add(const LoadTeachersEvent()),
+    return RepositoryProvider<AppNavigator>.value(
+      value: container.appNavigator,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<TeacherBloc>(
+            create: (context) => TeacherBloc(
+              getTeachersUseCase: container.getTeachersUseCase,
+              getCachedTeachersUseCase: container.getCachedTeachersUseCase,
+              addTeacherUseCase: container.addTeacherUseCase,
+            )..add(const LoadTeachersEvent()),
+          ),
+          BlocProvider<StudentBloc>(
+            create: (context) => StudentBloc()..add(LoadStudentsEvent()),
+          ),
+        ],
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          routerConfig: container.appRouter.router,
         ),
-        BlocProvider<StudentBloc>(
-          create: (context) => StudentBloc()..add(LoadStudentsEvent()),
-        ),
-      ],
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
       ),
     );
   }
@@ -67,10 +66,14 @@ class _FakeTeacherRepository implements TeacherRepository {
 @Preview(name: 'Home')
 Widget myAppPreview() {
   final fakeRepo = _FakeTeacherRepository();
+  final fakeRouter = AppRouter();
+  final fakeNavigator = AppNavigatorImpl(fakeRouter);
   final fakeContainer = AppContainer(
     getTeachersUseCase: GetTeachersUseCase(fakeRepo),
     getCachedTeachersUseCase: GetCachedTeachersUseCase(fakeRepo),
     addTeacherUseCase: AddTeacherUseCase(fakeRepo),
+    appRouter: fakeRouter,
+    appNavigator: fakeNavigator,
   );
   return MyApp(container: fakeContainer);
 }

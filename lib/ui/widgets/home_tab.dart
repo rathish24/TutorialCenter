@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tutorial_management/navigation/app_navigator.dart';
 import 'package:tutorial_management/theme/design_tokens.dart';
-import 'package:tutorial_management/ui/add_teacher_page.dart';
 import 'package:tutorial_management/ui/widgets/teachers_home_list.dart';
 import 'package:tutorial_management/ui/widgets/students_home_list.dart';
 
@@ -50,12 +51,7 @@ class HomeTab extends StatelessWidget {
                     iconSize: 25,
                     color: AppColors.primary,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddTeacherPage(),
-                        ),
-                      );
+                      context.read<AppNavigator>().goToAddTeacher();
                     },
                   ),
                 ],

@@ -9,6 +9,8 @@ import 'package:tutorial_management/domain/repositories/teacher_repository.dart'
 import 'package:tutorial_management/domain/usecases/add_teacher_usecase.dart';
 import 'package:tutorial_management/domain/usecases/get_teachers_usecase.dart';
 import 'package:tutorial_management/domain/usecases/get_cached_teachers_usecase.dart';
+import 'package:tutorial_management/navigation/app_navigator.dart';
+import 'package:tutorial_management/navigation/app_router.dart';
 
 class AppContainer {
   final Box? teachersBox;
@@ -16,10 +18,12 @@ class AppContainer {
   final TeacherFirebaseDatasource? remoteDatasource;
   final TeacherLocalDatasource? localDatasource;
   final TeacherRepository? teacherRepository;
-  
+
   final GetTeachersUseCase getTeachersUseCase;
   final GetCachedTeachersUseCase getCachedTeachersUseCase;
   final AddTeacherUseCase addTeacherUseCase;
+  late final AppRouter appRouter;
+  late final AppNavigator appNavigator;
 
   AppContainer({
     this.teachersBox,
@@ -30,6 +34,8 @@ class AppContainer {
     required this.getTeachersUseCase,
     required this.getCachedTeachersUseCase,
     required this.addTeacherUseCase,
+    required this.appRouter,
+    required this.appNavigator,
   });
 
   static Future<AppContainer> initialize() async {
@@ -50,7 +56,8 @@ class AppContainer {
     final getTeachers = GetTeachersUseCase(repository);
     final getCachedTeachers = GetCachedTeachersUseCase(repository);
     final addTeacher = AddTeacherUseCase(repository);
-
+    final appRouter = AppRouter();
+    final appNavigator = AppNavigatorImpl(appRouter);
     return AppContainer(
       teachersBox: box,
       firestore: firestoreInstance,
@@ -60,6 +67,8 @@ class AppContainer {
       getTeachersUseCase: getTeachers,
       getCachedTeachersUseCase: getCachedTeachers,
       addTeacherUseCase: addTeacher,
+      appRouter: appRouter,
+      appNavigator: appNavigator,
     );
   }
 }

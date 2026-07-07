@@ -1,46 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_bloc.dart';
 import 'package:tutorial_management/bloc/teacher/teacher_event.dart';
-import 'package:tutorial_management/ui/widgets/teachers_tab.dart';
-import 'package:tutorial_management/ui/widgets/students_tab.dart';
-import 'package:tutorial_management/ui/widgets/home_tab.dart';
 import 'package:tutorial_management/theme/design_tokens.dart';
+import 'package:tutorial_management/navigation/app_navigator.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  final StatefulNavigationShell navigationShell;
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  const HomeScreen({
+    super.key,
+    required this.navigationShell,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> pages = [
-      HomeTab(
-        onMoreTeachersTap: () => setState(() => _selectedIndex = 1),
-        onMoreStudentsTap: () => setState(() => _selectedIndex = 2),
-      ),
-      const TeachersTab(),
-      const StudentsTab(),
-      const Center(
-        child: Text(
-          "Profile Tab",
-          style: TextStyle(color: AppColors.primaryText, fontSize: 18),
-        ),
-      ),
-    ];
-
     return Scaffold(
       body: SafeArea(
         child: Container(
           color: AppColors.textIcons,
           width: double.infinity,
           height: double.infinity,
-          child: pages[_selectedIndex],
+          child: navigationShell,
         ),
       ),
       backgroundColor: AppColors.darkPrimary,
@@ -59,34 +41,34 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.home),
-                color: _selectedIndex == 0
+                color: navigationShell.currentIndex == 0
                     ? AppColors.textIcons
                     : AppColors.textIcons.withValues(alpha: 0.5),
                 onPressed: () {
-                  setState(() => _selectedIndex = 0);
+                  context.read<AppNavigator>().goToHome();
                   context.read<TeacherBloc>().add(const LoadTeachersEvent());
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.school),
-                color: _selectedIndex == 1
+                color: navigationShell.currentIndex == 1
                     ? AppColors.textIcons
                     : AppColors.textIcons.withValues(alpha: 0.5),
-                onPressed: () => setState(() => _selectedIndex = 1),
+                onPressed: () => context.read<AppNavigator>().goToTeacher(),
               ),
               IconButton(
                 icon: const Icon(Icons.people),
-                color: _selectedIndex == 2
+                color: navigationShell.currentIndex == 2
                     ? AppColors.textIcons
                     : AppColors.textIcons.withValues(alpha: 0.5),
-                onPressed: () => setState(() => _selectedIndex = 2),
+                onPressed: () => context.read<AppNavigator>().goToStudent(),
               ),
               IconButton(
                 icon: const Icon(Icons.account_circle_outlined),
-                color: _selectedIndex == 3
+                color: navigationShell.currentIndex == 3
                     ? AppColors.textIcons
                     : AppColors.textIcons.withValues(alpha: 0.5),
-                onPressed: () => setState(() => _selectedIndex = 3),
+                onPressed: () => context.read<AppNavigator>().goToProfile(),
               ),
             ],
           ),
