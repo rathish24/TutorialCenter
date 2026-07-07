@@ -1,0 +1,60 @@
+name: Flutter Static Analysis & Test Coverage CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  analyze-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Static Code Analysis
+        run: flutter analyze
+
+      - name: Run Unit & Widget Tests with Coverage
+        run: flutter test --coverage
+
+      - name: Generate Code Coverage Summary
+        if: success()
+        run: |
+          sudo apt-get update && sudo apt-get install -y lcov
+          lcov --summary coverage/lcov.info > coverage_summary.txt
+          
+          # Display in console
+          cat coverage_summary.txt
+          
+          # Publish to GitHub Actions Job Summary
+          echo "### 📊 Flutter Code Coverage Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test suite execution completed successfully. Here is the local LCOV summary:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`text" >> $GITHUB_STEP_SUMMARY
+          cat coverage_summary.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
