@@ -8,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tutorial_management/core/cache/hive_client.dart';
 import 'package:tutorial_management/core/cache/local_database_client.dart';
 import 'package:tutorial_management/core/network/api_client.dart';
+import 'package:tutorial_management/core/network/graphql_client.dart';
 import 'package:tutorial_management/core/network/connectivity_service.dart';
 import 'package:tutorial_management/core/network/interceptors/auth_interceptor.dart';
 import 'package:tutorial_management/core/network/interceptors/connectivity_interceptor.dart';
@@ -84,6 +85,7 @@ Future<void> setupLocator() async {
 
   // Register API Client
   sl.registerLazySingleton<ApiClient>(() => ApiClientImpl(sl()));
+  sl.registerLazySingleton<GraphQLClientWrapper>(() => GraphQLClientWrapperImpl(sl()));
 
   // Register Firebase Wrappers
   sl.registerLazySingleton<FirebaseLogger>(() => FirebaseLogger(isDebug: kDebugMode));
